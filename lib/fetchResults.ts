@@ -1,26 +1,22 @@
 import { SearchParams } from "@/app/search/page";
 import { Result } from "@/typings";
-import { link } from "fs";
-import { url } from "inspector";
-import { parse } from "path";
-import { title } from "process";
-import { render } from "react-dom";
 
 export async function fetchResults(searchParams: SearchParams) {
-  const username = process.env.OXYLAB_USERNAME;
-  const password = process.env.OXYLAB_PASSWORD;
+  const username = process.env.OXYLABS_USERNAME;
+  const password = process.env.OXYLABS_PASSWORD;
 
   const url = new URL(searchParams.url);
-
   Object.keys(searchParams).forEach((key) => {
     if (key === "url" || key === "location") return;
+
     const value = searchParams[key as keyof SearchParams];
+
     if (typeof value === "string") {
       url.searchParams.append(key, value);
     }
   });
 
-  console.log("scripting url>>> ", url.href);
+  console.log("scraping url >>>", url.href);
 
   const body = {
     source: "universal",
@@ -48,37 +44,36 @@ export async function fetchResults(searchParams: SearchParams) {
             _fns: [
               {
                 _fn: "xpath_one",
-                _args: [".//h4[ontains(@class,'abf093bdfe e8f7c070a7')]"],
+                _args: [
+                  ".//h4[contains(@class, 'abf093bdfe e8f7c070a7')]/text()",
+                ],
               },
             ],
           },
-
           booking_metadata: {
             _fns: [
               {
                 _fn: "xpath_one",
                 _args: [
-                  ".//div[contains(@class,'c5ca594cb1 f19ed67e4b')]/div[contains(@class, 'abf093bdfef45d8e4c32')//text()]",
+                  ".//div[contains(@class, 'c5ca594cb1 f19ed67e4b')]/div[contains(@class, 'abf093bdfe f45d8e4c32')]/text()",
                 ],
               },
             ],
           },
-
           link: {
             _fns: [
               {
                 _fn: "xpath_one",
-                _args: [".//a[ontains(@class, 'a78ca197d0')]/@href"],
+                _args: [".//a[contains(@class, 'a78ca197d0')]/@href"],
               },
             ],
           },
-
           price: {
             _fns: [
               {
                 _fn: "xpath_one",
                 _args: [
-                  `.//span[containes(@class,'f6431b446c fbfdc1165 e84eb96b1f')]/text()`,
+                  `.//span[contains(@class, 'f6431b446c fbfd7c1165 e84eb96b1f')]/text()`,
                 ],
               },
             ],
@@ -96,12 +91,20 @@ export async function fetchResults(searchParams: SearchParams) {
               {
                 _fn: "xpath_one",
                 _args: [
-                  ".//div[@class='a3b872ab1 e6208ee469 cb2cbb3ccb']/text()",
+                  ".//div[@class='a3b8729ab1 e6208ee469 cb2cbb3ccb']/text()",
                 ],
               },
             ],
           },
-          raiting_count: {
+          rating: {
+            _fns: [
+              {
+                _fn: "xpath_one",
+                _args: [".//div[@class='a3b8729ab1 d86cee9b25']/text()"],
+              },
+            ],
+          },
+          rating_count: {
             _fns: [
               {
                 _fn: "xpath_one",
@@ -113,7 +116,6 @@ export async function fetchResults(searchParams: SearchParams) {
           },
         },
       },
-
       total_listings: {
         _fns: [
           {
@@ -125,24 +127,26 @@ export async function fetchResults(searchParams: SearchParams) {
     },
   };
 
-  const response = await fetch("https://realtime.oxylab.io/v1/queries", {
+  const response = await fetch("https://realtime.oxylabs.io/v1/queries", {
     method: "POST",
     body: JSON.stringify(body),
     next: {
-      revalidate: 60 * 60, //cache for 1 h
+      revalidate: 60 * 60, // cache for 1 hour
     },
     headers: {
       "Content-Type": "application/json",
       Authorization:
-        "Basic" + Buffer.from(`${username}:${password}`).toString("base64"),
+        "Basic " + Buffer.from(`${username}:${password}`).toString("base64"),
     },
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.results.lenght === 0) return;
+      if (data.results.length === 0) return;
       const result: Result = data.results[0];
+
       return result;
     })
     .catch((err) => console.log(err));
+
   return response;
 }

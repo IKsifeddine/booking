@@ -1,10 +1,10 @@
 export const trending_data = [
   {
     id: 1,
-    src: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&0=",
+    src: "https://r-xx.bstatic.com/xdata/images/city/526x420/977220.jpg?k=ee4b7b42c35b8cbf09c8ddb7630092b40cd706fec153c41904ed6e252a883938&o=",
     title: "Dubai",
-    location: "United ArabEmirates",
-    description: "15Deals",
+    location: "United Arab Emirates",
+    description: "15 Deals",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const trending_data = [
   },
   {
     id: 3,
-    src: "https://cf.bstatic.com/xdata/images/xphoto/540x405/289320924.webp?k=99a00f2907495aaeb6396695c053e3d8b95fb05619b10e76c89fb1f7d1fec427&0=",
+    src: "https://cf.bstatic.com/xdata/images/xphoto/540x405/289320924.webp?k=99a00f2907495aaeb6396695c053e3d8b95fb05619b10e76c89fb1f7d1fec427&o=",
     title: "London",
     location: "United Kingdom",
     description: "45 Deals",
@@ -29,7 +29,7 @@ export const trending_data = [
   },
   {
     id: 5,
-    src: "https://cf.bstatic.com/xdata/images/xphoto/540x405/173724501.webp?k=5e8a2353c6cd4efef3c5f992ea36d65598c52f2662d45cedc460d1a6a759109f&0=",
+    src: "https://cf.bstatic.com/xdata/images/xphoto/540x405/173724501.webp?k=5e8a2353c6cd4efef3c5f992ea36d65598c52f2662d45cedc460d1a6a759109f&o=",
     title: "New York City",
     location: "United States of America",
     description: "92 Deals",
